@@ -8,6 +8,15 @@ var abbrs = loadJsonContent('./abbreviations.json')
 
 param resourceToken string = toLower(uniqueString(subscription().id, environmentName, location))
 
+@description('The application name for resource tagging')
+param applicationName string
+
+@description('The owner service for resource tagging')
+param ownerService string
+
+@description('The project ID for resource tagging')
+param projectId string
+
 @description('Location for all resources.')
 param location string
 
@@ -315,7 +324,12 @@ var blobContainerName = 'documents'
 var queueName = 'doc-processing'
 var clientKey = '${uniqueString(guid(subscription().id, deployment().name))}${newGuidString}'
 var eventGridSystemTopicName = 'doc-processing'
-var tags = { 'azd-env-name': environmentName }
+var tags = { 
+  'azd-env-name': environmentName
+  'ApplicationName': applicationName
+  'OwnerService': ownerService
+  'ProjectID': projectId
+}
 var rgName = 'rg-${environmentName}'
 var keyVaultName = '${abbrs.security.keyVault}${resourceToken}'
 var baseUrl = 'https://raw.githubusercontent.com/Azure-Samples/chat-with-your-data-solution-accelerator/main/'
